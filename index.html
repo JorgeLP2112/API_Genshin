@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Personajes de Genshin</title>
+    <style>
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 1em;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.character-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.character-box {
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    text-align: center;
+    padding: 1em;
+}
+
+.character-box:hover {
+    transform: scale(1.05);
+}
+
+.character-box h2 {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+}
+
+.character-box p {
+    margin: 10px;
+}
+
+.character-box img {
+    width: 100%;
+    height: auto;
+}
+
+.talent-list,
+.constellation-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.talent-list li,
+.constellation-list li {
+    margin-bottom: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Lista de Personajes de Genshin</h1>
+    <div class="character-container" id="genshinList"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+                const genshinListElement = document.getElementById('genshinList');
+
+                fetch('http://localhost:3000/genshinChars')  
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(personaje => {
+                            const formattedDate = new Date(personaje.releaseDate).toISOString().split('T')[0];
+                            const characterBox = document.createElement('div');
+                            characterBox.classList.add('character-box');
+                            characterBox.innerHTML = `
+                            <img src="${personaje.icon}" alt="${personaje.charName} Icono">
+                            <h2>${personaje.charName}</h2>
+                            <p>Elemento: ${personaje.element}</p>
+                            <p>Arma: ${personaje.weapon}</p>
+                            <p>Región: ${personaje.region}</p>
+                            <p>Género: ${personaje.gender}</p>
+                            <p>Fecha y Versión Debut: v${personaje.version} en ${formattedDate}</p>
+                            <p>Calidad: ${personaje.quality}</p>
+                            <p>Nivel: ${personaje.stats.level}</p>
+                            <p>Vida Base: ${personaje.stats.baseHp}</p>
+                            <p>Ataque Base: ${personaje.stats.baseAtk}</p>
+                            <p>Defensa Base: ${personaje.stats.baseDef}</p>
+                            <p>Estadística Bonus: ${personaje.stats.specialStat.stat}</p>
+                            <p>Aumento: ${personaje.stats.specialStat.baseStat}</p>
+                            <h3>Talentos</h3>
+                                <ul class="talent-list">
+                                    ${personaje.talents.map(talent => `<li>${talent.talentName} -- ${talent.talentType} -- ${talent.talentEffect}</li>`).join('')}
+                                </ul>
+                            <h3>Constelaciones</h3>
+                                <ul class="constellation-list">
+                                    ${personaje.constellations.map(constellation => `<li>${constellation.constLevel} -- ${constellation.constName} -- ${constellation.constEffect}</li>`).join('')}
+                                </ul>
+                            <!-- Agrega más datos aquí según sea necesario -->
+                `;
+                            genshinListElement.appendChild(characterBox);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener la lista de personajes:', error);
+                    });
+            });
+
+    </script>
+
+</body>
+
+</html>
