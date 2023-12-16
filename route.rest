@@ -102,7 +102,7 @@ DELETE http://localhost:3000/genshinChars/656f5db08ad1d0b167adcf36
 
 ###
 
-PATCH http://localhost:3000/genshinChars/656ed0816289b8060fa4bb7b
+PATCH http://localhost:3000/genshinChars/657de9e825a1b243114510f0
 Content-Type: application/json
 
 {
